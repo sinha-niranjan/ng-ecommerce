@@ -1,9 +1,403 @@
-import { Component } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
+import { Product } from '../../models/product';
+import { ProductCard } from '../../components/product-card/product-card';
 
 @Component({
   selector: 'app-products-grid',
-  imports: [],
-  template: ` <p>products-grid works!</p> `,
+  imports: [ProductCard],
+  template: `
+    <div class="bg-gray-100 p-6 h-full">
+      <h1 class="text-2xl font-bold text-gray-900 mb-6">
+        {{ category().toUpperCase() }}
+      </h1>
+      <div class="responsive-grid">
+        @for (product of filteredProducts(); track product.id) {
+          <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
+    </div>
+  `,
   styles: ``,
 })
-export default class ProductsGrid {}
+export default class ProductsGrid {
+  category = input<string>('all');
+
+  products = signal<Product[]>([
+    {
+      id: 'p001',
+      name: 'Wireless Bluetooth Headphones',
+      description: 'Premium wireless headphones with noise cancellation and long battery life.',
+      price: 2499,
+      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
+      rating: 4.5,
+      reviewCount: 128,
+      inStock: true,
+      category: 'Electronics',
+    },
+    {
+      id: 'p002',
+      name: 'Smart Fitness Watch',
+      description: 'Track your fitness, heart rate, sleep, steps, and daily activities.',
+      price: 3999,
+      imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
+      rating: 4.3,
+      reviewCount: 89,
+      inStock: true,
+      category: 'Wearables',
+    },
+    {
+      id: 'p003',
+      name: 'Mechanical Gaming Keyboard',
+      description:
+        'RGB mechanical keyboard with tactile switches designed for gaming and productivity.',
+      price: 3299,
+      imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3',
+      rating: 4.7,
+      reviewCount: 214,
+      inStock: true,
+      category: 'Computer Accessories',
+    },
+    {
+      id: 'p004',
+      name: 'Ergonomic Office Chair',
+      description:
+        'Comfortable ergonomic chair with adjustable height, armrests, and lumbar support.',
+      price: 8999,
+      imageUrl: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8',
+      rating: 4.4,
+      reviewCount: 156,
+      inStock: true,
+      category: 'Furniture',
+    },
+    {
+      id: 'p005',
+      name: 'Running Sports Shoes',
+      description: 'Lightweight running shoes with breathable mesh and cushioned sole.',
+      price: 2799,
+      imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff',
+      rating: 4.2,
+      reviewCount: 342,
+      inStock: true,
+      category: 'Footwear',
+    },
+    {
+      id: 'p006',
+      name: 'Premium Backpack',
+      description: 'Water-resistant backpack with laptop compartment and multiple storage pockets.',
+      price: 1899,
+      imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62',
+      rating: 4.6,
+      reviewCount: 176,
+      inStock: true,
+      category: 'Bags',
+    },
+    {
+      id: 'p007',
+      name: 'Portable Bluetooth Speaker',
+      description:
+        'Compact wireless speaker with powerful sound and up to 12 hours of battery life.',
+      price: 1599,
+      imageUrl: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
+      rating: 4.4,
+      reviewCount: 267,
+      inStock: true,
+      category: 'Electronics',
+    },
+    {
+      id: 'p008',
+      name: 'USB-C Fast Charger',
+      description: '65W fast charger compatible with smartphones, tablets, and laptops.',
+      price: 1299,
+      imageUrl: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0',
+      rating: 4.5,
+      reviewCount: 198,
+      inStock: true,
+      category: 'Accessories',
+    },
+    {
+      id: 'p009',
+      name: 'Stainless Steel Water Bottle',
+      description: 'Insulated stainless steel bottle that keeps beverages cold or hot for hours.',
+      price: 799,
+      imageUrl: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8',
+      rating: 4.6,
+      reviewCount: 421,
+      inStock: true,
+      category: 'Lifestyle',
+    },
+    {
+      id: 'p010',
+      name: 'Smart LED Desk Lamp',
+      description:
+        'Adjustable LED desk lamp with multiple brightness levels and color temperatures.',
+      price: 1199,
+      imageUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c',
+      rating: 4.1,
+      reviewCount: 73,
+      inStock: false,
+      category: 'Home & Office',
+    },
+    {
+      id: 'p011',
+      name: 'Wireless Gaming Mouse',
+      description:
+        'High-precision wireless gaming mouse with customizable buttons and RGB lighting.',
+      price: 2199,
+      imageUrl: 'https://images.unsplash.com/photo-1527814050087-3793815479db',
+      rating: 4.7,
+      reviewCount: 305,
+      inStock: true,
+      category: 'Computer Accessories',
+    },
+    {
+      id: 'p012',
+      name: 'Classic Analog Watch',
+      description: 'Elegant analog watch with a stainless steel case and premium leather strap.',
+      price: 3499,
+      imageUrl: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d',
+      rating: 4.3,
+      reviewCount: 112,
+      inStock: true,
+      category: 'Watches',
+    },
+    {
+      id: 'p013',
+      name: '4K Smart LED TV',
+      description: '55-inch 4K Ultra HD smart TV with HDR support and built-in streaming apps.',
+      price: 42999,
+      imageUrl: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1',
+      rating: 4.6,
+      reviewCount: 287,
+      inStock: true,
+      category: 'Television',
+    },
+    {
+      id: 'p014',
+      name: 'Laptop Stand',
+      description:
+        'Adjustable aluminum laptop stand designed for comfortable working and better posture.',
+      price: 1499,
+      imageUrl: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf',
+      rating: 4.5,
+      reviewCount: 189,
+      inStock: true,
+      category: 'Computer Accessories',
+    },
+    {
+      id: 'p015',
+      name: 'Wireless Earbuds',
+      description: 'Compact wireless earbuds with active noise cancellation and charging case.',
+      price: 2999,
+      imageUrl: 'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1',
+      rating: 4.4,
+      reviewCount: 531,
+      inStock: true,
+      category: 'Electronics',
+    },
+    {
+      id: 'p016',
+      name: 'Gaming Laptop',
+      description:
+        'High-performance gaming laptop with a powerful processor and dedicated graphics.',
+      price: 74999,
+      imageUrl: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302',
+      rating: 4.8,
+      reviewCount: 143,
+      inStock: true,
+      category: 'Laptops',
+    },
+    {
+      id: 'p017',
+      name: 'Smartphone Pro',
+      description:
+        'Modern smartphone featuring a high-resolution camera, fast processor, and AMOLED display.',
+      price: 34999,
+      imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9',
+      rating: 4.6,
+      reviewCount: 728,
+      inStock: true,
+      category: 'Smartphones',
+    },
+    {
+      id: 'p018',
+      name: 'Wireless Power Bank',
+      description: '10000mAh portable power bank with wireless charging and USB-C fast charging.',
+      price: 1799,
+      imageUrl: 'https://images.unsplash.com/photo-1609592424683-2d4b8f2d0f6b',
+      rating: 4.2,
+      reviewCount: 264,
+      inStock: true,
+      category: 'Accessories',
+    },
+    {
+      id: 'p019',
+      name: 'DSLR Camera',
+      description:
+        'Professional DSLR camera with high-resolution sensor and interchangeable lens support.',
+      price: 58999,
+      imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32',
+      rating: 4.7,
+      reviewCount: 96,
+      inStock: true,
+      category: 'Cameras',
+    },
+    {
+      id: 'p020',
+      name: 'Travel Backpack',
+      description:
+        'Large travel backpack with laptop storage, multiple compartments, and water-resistant fabric.',
+      price: 2499,
+      imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62',
+      rating: 4.5,
+      reviewCount: 315,
+      inStock: true,
+      category: 'Bags',
+    },
+    {
+      id: 'p021',
+      name: 'Running T-Shirt',
+      description:
+        'Lightweight breathable sports t-shirt suitable for running and outdoor activities.',
+      price: 899,
+      imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab',
+      rating: 4.3,
+      reviewCount: 156,
+      inStock: true,
+      category: 'Clothing',
+    },
+    {
+      id: 'p022',
+      name: 'Denim Jacket',
+      description: 'Classic denim jacket with a comfortable fit and durable cotton fabric.',
+      price: 2199,
+      imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5',
+      rating: 4.4,
+      reviewCount: 204,
+      inStock: true,
+      category: 'Clothing',
+    },
+    {
+      id: 'p023',
+      name: 'Casual Sneakers',
+      description: 'Comfortable everyday sneakers with a lightweight sole and modern design.',
+      price: 1999,
+      imageUrl: 'https://images.unsplash.com/photo-1549298916-b41d501d3772',
+      rating: 4.5,
+      reviewCount: 367,
+      inStock: true,
+      category: 'Footwear',
+    },
+    {
+      id: 'p024',
+      name: 'Coffee Maker',
+      description: 'Automatic coffee maker with programmable brewing and reusable filter.',
+      price: 4599,
+      imageUrl: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6',
+      rating: 4.6,
+      reviewCount: 178,
+      inStock: true,
+      category: 'Kitchen',
+    },
+    {
+      id: 'p025',
+      name: 'Air Fryer',
+      description:
+        'Digital air fryer with multiple cooking modes and adjustable temperature control.',
+      price: 5499,
+      imageUrl: 'https://images.unsplash.com/photo-1585325701165-351af916e581',
+      rating: 4.5,
+      reviewCount: 422,
+      inStock: true,
+      category: 'Kitchen',
+    },
+    {
+      id: 'p026',
+      name: 'Electric Kettle',
+      description: 'Fast-boiling stainless steel electric kettle with automatic shut-off.',
+      price: 1299,
+      imageUrl: 'https://images.unsplash.com/photo-1594213114663-d94db9b171e9',
+      rating: 4.3,
+      reviewCount: 291,
+      inStock: true,
+      category: 'Kitchen',
+    },
+    {
+      id: 'p027',
+      name: 'Desk Organizer',
+      description:
+        'Minimalist desk organizer for storing pens, stationery, and small office accessories.',
+      price: 499,
+      imageUrl: 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5',
+      rating: 4.1,
+      reviewCount: 87,
+      inStock: true,
+      category: 'Home & Office',
+    },
+    {
+      id: 'p028',
+      name: 'LED Monitor',
+      description:
+        '27-inch Full HD monitor with slim bezels and smooth refresh rate for work and entertainment.',
+      price: 12999,
+      imageUrl: 'https://images.unsplash.com/photo-1527443195645-1133f7f28990',
+      rating: 4.6,
+      reviewCount: 238,
+      inStock: true,
+      category: 'Computer Accessories',
+    },
+    {
+      id: 'p029',
+      name: 'External SSD 1TB',
+      description:
+        'Portable 1TB solid-state drive with fast data transfer speeds and USB-C connectivity.',
+      price: 6999,
+      imageUrl: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b',
+      rating: 4.8,
+      reviewCount: 412,
+      inStock: true,
+      category: 'Storage',
+    },
+    {
+      id: 'p030',
+      name: 'Bluetooth Keyboard',
+      description: 'Slim wireless keyboard with Bluetooth connectivity and long-lasting battery.',
+      price: 1799,
+      imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3',
+      rating: 4.4,
+      reviewCount: 193,
+      inStock: false,
+      category: 'Computer Accessories',
+    },
+    {
+      id: 'p031',
+      name: 'Smart Home Camera',
+      description:
+        'Indoor security camera with HD video, motion detection, and mobile notifications.',
+      price: 2299,
+      imageUrl: 'https://images.unsplash.com/photo-1558008258-3256797b43f3',
+      rating: 4.2,
+      reviewCount: 276,
+      inStock: true,
+      category: 'Smart Home',
+    },
+    {
+      id: 'p032',
+      name: 'Table Lamp',
+      description:
+        'Modern table lamp with adjustable brightness for bedrooms, desks, and study areas.',
+      price: 999,
+      imageUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c',
+      rating: 4.3,
+      reviewCount: 118,
+      inStock: true,
+      category: 'Home & Office',
+    },
+  ]);
+
+  filteredProducts = computed(() => {
+    if (this.category() === 'all') return this.products();
+    return this.products().filter(
+      (p) => p.category.toLowerCase() === this.category().toLowerCase(),
+    );
+  });
+}
