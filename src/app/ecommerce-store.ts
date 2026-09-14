@@ -418,8 +418,17 @@ export const EcommerceStore = signalStore(
       });
 
       patchState(store, { wishlistItems: updatedWishlistItems });
-
       toaster.success('product added to successfully !!!');
     },
+    removeFromWishlist: (product: Product) => {
+      patchState(store, {
+        wishlistItems: store.wishlistItems().filter((p) => p.id !== product.id),
+      });
+      toaster.success('product removed from wishlist successfully !!!');
+    },
+    clearWishlist: () => {
+      patchState(store, { wishlistItems: [] });
+      toaster.success('wishlist cleared successfully !!!');
+    }
   })),
 );
